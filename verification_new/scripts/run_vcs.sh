@@ -189,6 +189,7 @@ main() {
     COMPILE_OPTS="$COMPILE_OPTS +incdir+$RTL_DIR/include"   # Include RTL packages
     COMPILE_OPTS="$COMPILE_OPTS +incdir+$UVM_TB_DIR/interfaces" # Include interfaces
     COMPILE_OPTS="$COMPILE_OPTS +define+ENABLE_ASSERTIONS"  # Enable assertions
+    COMPILE_OPTS="$COMPILE_OPTS +define+SIMULATION"         # Enable simulation-specific code
     
     # Add coverage options
     COMPILE_OPTS="$COMPILE_OPTS -cm line+cond+fsm+branch+tgl"
@@ -218,6 +219,10 @@ main() {
 $RTL_DIR/include/cv32e40p_pkg.sv
 $RTL_DIR/include/cv32e40p_apu_core_pkg.sv
 $RTL_DIR/include/cv32e40p_fpu_pkg.sv
+
+// Create behavioral clock gate for simulation
+$VERIFICATION_DIR/rtl_sim/cv32e40p_clock_gate.sv
+
 $RTL_DIR/cv32e40p_alu.sv
 $RTL_DIR/cv32e40p_alu_div.sv
 $RTL_DIR/cv32e40p_ff_one.sv

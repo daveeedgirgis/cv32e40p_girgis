@@ -43,6 +43,10 @@ cat > test_files.f << EOF
 $RTL_DIR/include/cv32e40p_pkg.sv
 $RTL_DIR/include/cv32e40p_apu_core_pkg.sv
 $RTL_DIR/include/cv32e40p_fpu_pkg.sv
+
+// Behavioral clock gate for simulation
+$VERIFICATION_DIR/rtl_sim/cv32e40p_clock_gate.sv
+
 $UVM_TB_DIR/interfaces/cv32e40p_if.sv
 $UVM_TB_DIR/interfaces/alu_monitor_if.sv
 $UVM_TB_DIR/env/alu_pkg.sv
