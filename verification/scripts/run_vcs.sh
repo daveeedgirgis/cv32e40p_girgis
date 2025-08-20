@@ -8,8 +8,8 @@
 
 # Script configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-VERIFICATION_DIR="$PROJECT_ROOT/verification"
+VERIFICATION_DIR="$(dirname "$SCRIPT_DIR")"
+PROJECT_ROOT="$(dirname "$VERIFICATION_DIR")"
 UVM_TB_DIR="$VERIFICATION_DIR/uvm_alu_tb"
 RTL_DIR="$PROJECT_ROOT/rtl"
 
