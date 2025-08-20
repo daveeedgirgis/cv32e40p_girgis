@@ -1,36 +1,37 @@
-# CV32E40P ALU Verification - Quick Reference Card
+# CV32E40P ALU Verification - Quick Reference
 
-## 🚀 **Quick Commands**
+## 🚀 Instant Commands
 
-### **Test Everything (5 seconds)**
+### ⚡ Most Common Commands
 ```bash
+# Navigate to verification directory
+cd /path/to/cv32e40p_girgis/verification_new
+
+# Run comprehensive validation (no VCS needed)
 ./scripts/stage1_test.sh
-```
-**Expected:** `🎉 ALL TESTS PASSED! (10/10)`
 
-### **Run Simulation (VCS Required)**
-```bash
-# Basic test
-./scripts/run_vcs.sh -test alu_arith_test
+# Run basic ALU test (VCS required)
+./scripts/run_vcs.sh
 
-# With waveforms
-./scripts/run_vcs.sh -test alu_arith_test -waves
-
-# With coverage
-./scripts/run_vcs.sh -test alu_arith_test -coverage
-
-# Show help
-./scripts/run_vcs.sh -help
+# Run specific operation tests
+./scripts/run_vcs.sh alu_arith_test    # Arithmetic: ADD, SUB
+./scripts/run_vcs.sh alu_logic_test    # Logic: AND, OR, XOR  
+./scripts/run_vcs.sh alu_shift_test    # Shift: SLL, SRL, SRA
 ```
 
-### **Check Syntax**
+### **Validation Commands (No VCS Required)**
 ```bash
-./scripts/syntax_check.sh
+./scripts/stage1_test.sh      # Complete validation suite
+./scripts/syntax_check.sh     # SystemVerilog syntax check
 ```
 
-### **Test Compilation**
+### **Simulation Commands (VCS Required)**
 ```bash
-./scripts/compile_test.sh
+./scripts/run_vcs.sh                    # Default test
+./scripts/run_vcs.sh alu_arith_test     # Arithmetic operations
+./scripts/run_vcs.sh alu_logic_test     # Logic operations
+./scripts/run_vcs.sh alu_shift_test     # Shift operations
+./scripts/compile_test.sh               # Compilation test only
 ```
 
 ---

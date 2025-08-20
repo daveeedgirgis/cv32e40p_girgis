@@ -38,5 +38,8 @@ package alu_pkg;
     `include "alu_arith_test.sv"
     `include "alu_logic_test.sv"
     `include "alu_shift_test.sv"
+    
+    // 6. Stage 2 Advanced Test Classes
+    `include "alu_stage2_tests.sv"
 
 endpackage : alu_pkg
