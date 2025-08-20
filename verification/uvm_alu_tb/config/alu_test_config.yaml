@@ -1,0 +1,177 @@
+# =============================================================================
+# ALU Testbench Configuration File
+#
+# YAML configuration file for controlling all aspects of ALU verification
+# Modify these settings to customize test behavior and coverage collection
+# =============================================================================
+
+# Test Control Settings
+test_control:
+  num_instructions: 1000              # Number of instructions to execute
+  test_timeout_cycles: 50000          # Maximum simulation cycles before timeout
+  random_seed: 1                      # Random seed (0 for random seed)
+  verbosity: "UVM_MEDIUM"             # UVM verbosity level
+  enable_scoreboard: true             # Enable result checking
+  enable_coverage: true               # Enable functional coverage collection
+
+# ALU Operation Control
+alu_operations:
+  enable_arithmetic: true             # ADD, SUB, ADDU, SUBU operations
+  enable_logic: true                  # AND, OR, XOR operations  
+  enable_shift: true                  # SLL, SRL, SRA, ROR operations
+  enable_comparison: true             # LT, EQ, GT comparison operations
+  enable_bit_manipulation: false     # BSET, BCLR, BEXT operations (PULP)
+  enable_division: false              # DIV, REM operations (slow)
+  enable_pulp_extensions: false       # PULP custom operations
+
+# Instruction Mix Weights (higher = more frequent)
+instruction_weights:
+  arithmetic_weight: 30               # Weight for arithmetic instructions
+  logic_weight: 20                    # Weight for logic instructions
+  shift_weight: 15                    # Weight for shift instructions
+  comparison_weight: 20               # Weight for comparison instructions
+  load_store_weight: 10               # Weight for load/store instructions
+  branch_weight: 5                    # Weight for branch instructions
+
+# Operand Generation Control
+operand_control:
+  enable_corner_cases: true           # Include 0, max, min values
+  enable_random_operands: true        # Generate random operand values
+  operand_min_value: -2147483648      # Minimum operand value (signed)
+  operand_max_value: 2147483647       # Maximum operand value (signed)
+  corner_case_percentage: 10          # Percentage of corner case operands
+
+# Memory Configuration
+memory_config:
+  instruction_base_addr: 0x80         # Base address for instruction memory
+  data_base_addr: 0x1000              # Base address for data memory
+  instruction_memory_size: 4096       # Instruction memory size in bytes
+  data_memory_size: 4096              # Data memory size in bytes
+
+# Coverage Configuration
+coverage_config:
+  enable_instruction_coverage: true   # Cover different instruction types
+  enable_operand_coverage: true       # Cover operand value ranges
+  enable_result_coverage: true        # Cover result value ranges
+  enable_sequence_coverage: true      # Cover instruction sequences
+  enable_cross_coverage: true         # Cross coverage between operations
+  
+  # Coverage goals (percentage)
+  functional_coverage_goal: 95        # Target functional coverage
+  code_coverage_goal: 90              # Target code coverage
+
+# Debug and Logging Control
+debug_config:
+  enable_waveform_dump: true          # Generate VCD/FSDB waveforms
+  waveform_format: "fsdb"             # Waveform format: "vcd" or "fsdb"
+  enable_transaction_logging: true    # Log all UVM transactions
+  enable_alu_signal_logging: true     # Log internal ALU signals
+  enable_instruction_trace: true      # Trace instruction execution
+  log_file_name: "alu_test.log"       # Log file name
+
+# Simulation Control
+simulation_config:
+  simulator: "vcs"                    # Simulator: "vcs", "questa", "xcelium"
+  enable_assertions: true             # Enable SystemVerilog assertions
+  enable_checkers: true               # Enable protocol checkers
+  optimization_level: "medium"        # Compilation optimization: "none", "medium", "high"
+  
+# VCS Specific Settings
+vcs_config:
+  compile_options:
+    - "+define+UVM_REGEX_NO_DPI"      # UVM regex without DPI
+    - "-sverilog"                     # Enable SystemVerilog
+    - "+v2k"                          # Verilog 2001 support
+    - "-timescale=1ns/1ps"            # Time scale
+    - "-debug_access+all"             # Debug access
+    - "+vcs+lic+wait"                 # License wait
+    
+  runtime_options:
+    - "+UVM_TESTNAME=alu_base_test"   # Default test name
+    - "+UVM_VERBOSITY=UVM_MEDIUM"     # Default verbosity
+    - "-ucli"                         # Enable UCLI
+    - "+vcs+lic+wait"                 # License wait
+
+# File Lists
+file_lists:
+  rtl_files:
+    - "../../rtl/include/cv32e40p_pkg.sv"
+    - "../../rtl/cv32e40p_alu.sv"
+    - "../../rtl/cv32e40p_alu_div.sv"
+    - "../../rtl/cv32e40p_ff_one.sv"
+    - "../../rtl/cv32e40p_popcnt.sv"
+    - "../../rtl/cv32e40p_mult.sv"
+    - "../../rtl/cv32e40p_int_controller.sv"
+    - "../../rtl/cv32e40p_ex_stage.sv"
+    - "../../rtl/cv32e40p_id_stage.sv"
+    - "../../rtl/cv32e40p_if_stage.sv"
+    - "../../rtl/cv32e40p_load_store_unit.sv"
+    - "../../rtl/cv32e40p_controller.sv"
+    - "../../rtl/cv32e40p_fifo.sv"
+    - "../../rtl/cv32e40p_hwloop_regs.sv"
+    - "../../rtl/cv32e40p_prefetch_buffer.sv"
+    - "../../rtl/cv32e40p_prefetch_controller.sv"
+    - "../../rtl/cv32e40p_obi_interface.sv"
+    - "../../rtl/cv32e40p_aligner.sv"
+    - "../../rtl/cv32e40p_decoder.sv"
+    - "../../rtl/cv32e40p_compressed_decoder.sv"
+    - "../../rtl/cv32e40p_register_file_ff.sv"
+    - "../../rtl/cv32e40p_cs_registers.sv"
+    - "../../rtl/cv32e40p_sleep_unit.sv"
+    - "../../rtl/cv32e40p_core.sv"
+    - "../../rtl/cv32e40p_top.sv"
+  
+  verification_files:
+    - "interfaces/cv32e40p_if.sv"
+    - "interfaces/alu_monitor_if.sv"
+    - "env/alu_tb_pkg.sv"
+    - "tb/alu_tb_top.sv"
+
+# Test Selection
+test_config:
+  default_test: "alu_base_test"       # Default test to run
+  
+  available_tests:
+    - name: "alu_base_test"
+      description: "Basic ALU test with mixed operations"
+      num_instructions: 100
+      
+    - name: "alu_arithmetic_test"  
+      description: "Focused arithmetic operations test"
+      num_instructions: 500
+      operations: ["arithmetic"]
+      
+    - name: "alu_logic_test"
+      description: "Focused logic operations test"
+      num_instructions: 300
+      operations: ["logic"]
+      
+    - name: "alu_shift_test"
+      description: "Focused shift operations test" 
+      num_instructions: 200
+      operations: ["shift"]
+      
+    - name: "alu_comparison_test"
+      description: "Focused comparison operations test"
+      num_instructions: 400
+      operations: ["comparison"]
+      
+    - name: "alu_stress_test"
+      description: "High-volume stress test"
+      num_instructions: 10000
+      
+    - name: "alu_corner_case_test"
+      description: "Corner case focused test"
+      num_instructions: 200
+      corner_case_percentage: 50
+
+# Coverage Exclusions  
+coverage_exclusions:
+  exclude_operations:
+    - "ALU_BREV"                      # Bit reverse (complex PULP operation)
+    - "ALU_SHUF"                      # Shuffle operations
+    - "ALU_PCKLO"                     # Pack operations
+    - "ALU_PCKHI"                     # Pack operations
+  
+  exclude_combinations:
+    - "vector_mode != VEC_MODE32"     # Exclude vector modes for now
