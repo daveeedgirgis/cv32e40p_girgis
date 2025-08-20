@@ -142,16 +142,16 @@ run_single_test() {
     
     # Run the test with logging
     local test_log="$LOG_DIR/${test_name}_${TIMESTAMP}.log"
-    local coverage_opts=""
-    
-    if [ "$COVERAGE_MODE" = true ]; then
-        coverage_opts="-cm_dir $VERIFICATION_DIR/coverage/regression_$TIMESTAMP/${test_name}.vdb"
-    fi
     
     # Execute test with better error handling
-    print_info "Command: ./scripts/run_vcs.sh \"$test_name\" \"$verbosity\" \"$RANDOM\" $coverage_opts"
+    if [ "$COVERAGE_MODE" = true ]; then
+        print_info "Command: ./scripts/run_vcs.sh \"$test_name\" \"$verbosity\" \"$RANDOM\" (with coverage)"
+    else
+        print_info "Command: ./scripts/run_vcs.sh \"$test_name\" \"$verbosity\" \"$RANDOM\""
+    fi
     
-    if timeout 3600 ./scripts/run_vcs.sh "$test_name" "$verbosity" "$RANDOM" $coverage_opts > "$test_log" 2>&1; then
+    # Note: Coverage is handled internally by run_vcs.sh, not as external option
+    if timeout 3600 ./scripts/run_vcs.sh "$test_name" "$verbosity" "$RANDOM" > "$test_log" 2>&1; then
         local end_time=$(date +%s)
         local duration=$((end_time - start_time))
         local duration_min=$((duration / 60))
