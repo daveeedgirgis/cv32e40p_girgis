@@ -430,40 +430,140 @@ class alu_corner_case_sequence extends alu_base_sequence;
     task test_max_min_values();
         `uvm_info("ALU_SEQ", "Testing max/min values", UVM_MEDIUM)
         
-        logic [31:0] val_a, val_b;
-        
         // Test all combinations of boundary values
         for (int i = 0; i < 5; i++) begin
             for (int j = 0; j < 5; j++) begin
                 alu_sequence_item item;
                 
-                // Select test values based on index
-                case (i)
-                    0: val_a = 32'h00000000;  // Zero
-                    1: val_a = 32'h00000001;  // Min positive
-                    2: val_a = 32'h7FFFFFFF;  // Max positive
-                    3: val_a = 32'h80000000;  // Min negative
-                    4: val_a = 32'hFFFFFFFF;  // Max negative (-1)
-                endcase
-                
-                case (j)
-                    0: val_b = 32'h00000000;  // Zero
-                    1: val_b = 32'h00000001;  // Min positive
-                    2: val_b = 32'h7FFFFFFF;  // Max positive
-                    3: val_b = 32'h80000000;  // Min negative
-                    4: val_b = 32'hFFFFFFFF;  // Max negative (-1)
-                endcase
-                
                 item = alu_sequence_item::type_id::create($sformatf("maxmin_%0d_%0d", i, j));
                 start_item(item);
                 
-                if (!item.randomize() with {
-                    operand_a == val_a;
-                    operand_b == val_b;
-                    scenario == SCENARIO_CORNER_CASE;
-                }) begin
-                    `uvm_error("ALU_SEQ", "Max/min randomization failed")
-                    continue;
+                // Use direct values in constraints based on indices
+                if (i == 0 && j == 0) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h00000000; operand_b == 32'h00000000;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 0 && j == 1) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h00000000; operand_b == 32'h00000001;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 0 && j == 2) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h00000000; operand_b == 32'h7FFFFFFF;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 0 && j == 3) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h00000000; operand_b == 32'h80000000;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 0 && j == 4) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h00000000; operand_b == 32'hFFFFFFFF;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 1 && j == 0) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h00000001; operand_b == 32'h00000000;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 1 && j == 1) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h00000001; operand_b == 32'h00000001;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 1 && j == 2) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h00000001; operand_b == 32'h7FFFFFFF;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 1 && j == 3) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h00000001; operand_b == 32'h80000000;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 1 && j == 4) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h00000001; operand_b == 32'hFFFFFFFF;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 2 && j == 0) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h7FFFFFFF; operand_b == 32'h00000000;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 2 && j == 1) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h7FFFFFFF; operand_b == 32'h00000001;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 2 && j == 2) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h7FFFFFFF; operand_b == 32'h7FFFFFFF;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 2 && j == 3) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h7FFFFFFF; operand_b == 32'h80000000;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 2 && j == 4) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h7FFFFFFF; operand_b == 32'hFFFFFFFF;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 3 && j == 0) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h80000000; operand_b == 32'h00000000;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 3 && j == 1) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h80000000; operand_b == 32'h00000001;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 3 && j == 2) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h80000000; operand_b == 32'h7FFFFFFF;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 3 && j == 3) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h80000000; operand_b == 32'h80000000;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 3 && j == 4) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'h80000000; operand_b == 32'hFFFFFFFF;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 4 && j == 0) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'hFFFFFFFF; operand_b == 32'h00000000;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 4 && j == 1) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'hFFFFFFFF; operand_b == 32'h00000001;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 4 && j == 2) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'hFFFFFFFF; operand_b == 32'h7FFFFFFF;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 4 && j == 3) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'hFFFFFFFF; operand_b == 32'h80000000;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
+                end else if (i == 4 && j == 4) begin
+                    if (!item.randomize() with {
+                        operand_a == 32'hFFFFFFFF; operand_b == 32'hFFFFFFFF;
+                        scenario == SCENARIO_CORNER_CASE;
+                    }) `uvm_error("ALU_SEQ", "Randomization failed")
                 end
                 
                 finish_item(item);
