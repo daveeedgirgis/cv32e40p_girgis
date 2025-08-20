@@ -41,5 +41,10 @@ package alu_pkg;
     
     // 6. Stage 2 Advanced Test Classes
     `include "alu_stage2_tests.sv"
+    
+    // 7. Stage 3 Coverage Framework
+    `include "alu_coverage_model.sv"
+    `include "alu_verification_closure.sv"
+    `include "alu_coverage_test.sv"
 
 endpackage : alu_pkg
