@@ -9,7 +9,7 @@ class alu_monitor extends uvm_monitor;
     `uvm_component_utils(alu_monitor)
     
     // Virtual interface handle
-    virtual alu_monitor_if.monitor vif;
+    virtual alu_monitor_if vif;
     
     // Analysis port for sending transactions
     uvm_analysis_port #(alu_transaction) ap;

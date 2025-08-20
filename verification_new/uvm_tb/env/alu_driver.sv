@@ -9,7 +9,7 @@ class alu_driver extends uvm_driver #(alu_sequence_item);
     `uvm_component_utils(alu_driver)
     
     // Virtual interface handle
-    virtual cv32e40p_if.mem_driver vif;
+    virtual cv32e40p_if vif;
     
     // Configuration handle
     alu_config cfg;
