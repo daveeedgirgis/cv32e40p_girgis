@@ -430,25 +430,36 @@ class alu_corner_case_sequence extends alu_base_sequence;
     task test_max_min_values();
         `uvm_info("ALU_SEQ", "Testing max/min values", UVM_MEDIUM)
         
-        logic [31:0] test_values[5];
+        logic [31:0] val_a, val_b;
         
-        // Initialize test values
-        test_values[0] = 32'h00000000;  // Zero
-        test_values[1] = 32'h00000001;  // Min positive
-        test_values[2] = 32'h7FFFFFFF;  // Max positive
-        test_values[3] = 32'h80000000;  // Min negative
-        test_values[4] = 32'hFFFFFFFF;  // Max negative (-1)
-        
+        // Test all combinations of boundary values
         for (int i = 0; i < 5; i++) begin
             for (int j = 0; j < 5; j++) begin
                 alu_sequence_item item;
+                
+                // Select test values based on index
+                case (i)
+                    0: val_a = 32'h00000000;  // Zero
+                    1: val_a = 32'h00000001;  // Min positive
+                    2: val_a = 32'h7FFFFFFF;  // Max positive
+                    3: val_a = 32'h80000000;  // Min negative
+                    4: val_a = 32'hFFFFFFFF;  // Max negative (-1)
+                endcase
+                
+                case (j)
+                    0: val_b = 32'h00000000;  // Zero
+                    1: val_b = 32'h00000001;  // Min positive
+                    2: val_b = 32'h7FFFFFFF;  // Max positive
+                    3: val_b = 32'h80000000;  // Min negative
+                    4: val_b = 32'hFFFFFFFF;  // Max negative (-1)
+                endcase
                 
                 item = alu_sequence_item::type_id::create($sformatf("maxmin_%0d_%0d", i, j));
                 start_item(item);
                 
                 if (!item.randomize() with {
-                    operand_a == test_values[i];
-                    operand_b == test_values[j];
+                    operand_a == val_a;
+                    operand_b == val_b;
                     scenario == SCENARIO_CORNER_CASE;
                 }) begin
                     `uvm_error("ALU_SEQ", "Max/min randomization failed")
