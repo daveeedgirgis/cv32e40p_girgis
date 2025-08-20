@@ -70,7 +70,7 @@ class alu_sequence_item extends uvm_sequence_item;
             ALU_SLL    := 8,   // Shift operations
             ALU_SRL    := 8,   // Shift operations
             ALU_SRA    := 4,   // Arithmetic shift less common
-            ALU_SLT    := 2,   // Comparison operations
+            ALU_SLTS   := 2,   // Comparison operations
             ALU_SLTU   := 1    // Unsigned comparison
         };
     }
@@ -208,7 +208,7 @@ class alu_sequence_item extends uvm_sequence_item;
             ALU_SLL:  expected_result = operand_a << operand_b[4:0];
             ALU_SRL:  expected_result = operand_a >> operand_b[4:0];
             ALU_SRA:  expected_result = $signed(operand_a) >>> operand_b[4:0];
-            ALU_SLT:  expected_result = ($signed(operand_a) < $signed(operand_b)) ? 32'h1 : 32'h0;
+            ALU_SLTS: expected_result = ($signed(operand_a) < $signed(operand_b)) ? 32'h1 : 32'h0;
             ALU_SLTU: expected_result = (operand_a < operand_b) ? 32'h1 : 32'h0;
             default:  expected_result = 32'hDEADBEEF;
         endcase

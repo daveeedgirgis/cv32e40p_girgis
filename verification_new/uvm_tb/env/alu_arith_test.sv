@@ -30,14 +30,14 @@ class alu_arith_test extends alu_base_test;
     
     // Run phase
     virtual task run_phase(uvm_phase phase);
-        alu_arithmetic_sequence seq;
+        alu_exhaustive_sequence seq;
         
         phase.raise_objection(this);
         
         `uvm_info("ALU_ARITH_TEST", "Starting arithmetic test", UVM_LOW)
         
-        // Create and run arithmetic sequence
-        seq = alu_arithmetic_sequence::type_id::create("seq");
+        // Create and run exhaustive sequence focused on arithmetic
+        seq = alu_exhaustive_sequence::type_id::create("seq");
         seq.start(env.agent.sequencer);
         
         // Wait some time for monitor
