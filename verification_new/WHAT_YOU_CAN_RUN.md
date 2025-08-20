@@ -105,32 +105,59 @@ Stage 1 implementation is COMPLETE and VALIDATED
 ---
 
 ### **4. Main Simulation Script** (VCS Required)
+
+#### **⚠️ IMPORTANT: Correct Command Syntax**
+
+**✅ CORRECT:**
 ```bash
-./scripts/run_vcs.sh [options]
+./scripts/run_vcs.sh alu_performance_test
+./scripts/run_vcs.sh alu_data_pattern_test
+./scripts/run_vcs.sh alu_corner_case_test
 ```
 
-**Available Options:**
+**❌ WRONG:**
 ```bash
-# Show help
-./scripts/run_vcs.sh -help
+./scripts/run_vcs.sh +UVM_TESTNAME=alu_performance_test  # Don't use this!
+```
 
-# Run basic test
-./scripts/run_vcs.sh -test alu_base_test
+The script automatically adds the `+UVM_TESTNAME=` prefix. Just provide the test name as the first argument.
 
-# Run arithmetic test
-./scripts/run_vcs.sh -test alu_arith_test
+#### **Script Usage:**
+```bash
+./scripts/run_vcs.sh [TEST_NAME] [VERBOSITY] [SEED] [ADDITIONAL_OPTIONS]
+```
 
-# Run with waveforms
-./scripts/run_vcs.sh -test alu_arith_test -waves
+#### **Stage 1 Tests (Basic):**
+```bash
+./scripts/run_vcs.sh                    # Default test (alu_base_test)
+./scripts/run_vcs.sh alu_arith_test     # Arithmetic operations
+./scripts/run_vcs.sh alu_logic_test     # Logic operations  
+./scripts/run_vcs.sh alu_shift_test     # Shift operations
+```
 
-# Run with coverage
-./scripts/run_vcs.sh -test alu_arith_test -coverage
+#### **Stage 2 Tests (Advanced):**
+```bash
+./scripts/run_vcs.sh alu_data_pattern_test      # 8 data patterns (5 min)
+./scripts/run_vcs.sh alu_corner_case_test       # Edge conditions (5 min)
+./scripts/run_vcs.sh alu_performance_test       # IPC analysis (15 min)
+./scripts/run_vcs.sh alu_exhaustive_test        # Full coverage (10 min)
+./scripts/run_vcs.sh alu_mixed_workload_test    # Realistic patterns (20 min)
+./scripts/run_vcs.sh alu_pipeline_hazard_test   # Hazard detection (15 min)
+./scripts/run_vcs.sh alu_stress_test            # Reliability (45 min)
+./scripts/run_vcs.sh alu_comprehensive_stage2_test  # All phases (30 min)
+```
 
-# Run with debug
-./scripts/run_vcs.sh -test alu_arith_test -debug
+#### **With Custom Options:**
+```bash
+# Custom verbosity
+./scripts/run_vcs.sh alu_performance_test UVM_LOW
+./scripts/run_vcs.sh alu_performance_test UVM_HIGH
 
-# Custom configuration
-./scripts/run_vcs.sh -test alu_arith_test -config my_config.yaml
+# Custom seed
+./scripts/run_vcs.sh alu_performance_test UVM_MEDIUM 12345
+
+# Debug mode
+./scripts/run_vcs.sh alu_corner_case_test UVM_HIGH 123 +define+DEBUG_MODE
 ```
 
 **Available Test Classes:**

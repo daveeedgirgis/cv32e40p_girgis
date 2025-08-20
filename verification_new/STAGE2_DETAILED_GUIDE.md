@@ -227,7 +227,7 @@ cd ~/claude/chipagents/git_girgis_fork/cv32e40p_girgis/verification_new
 
 #### **2. Performance Analysis** (15 minutes)
 ```bash
-./scripts/run_vcs.sh alu_performance_test UVM_LOW
+./scripts/run_vcs.sh alu_performance_test
 ```
 **What it does**: Measures IPC and analyzes performance
 **Transactions**: 2000
@@ -240,6 +240,18 @@ cd ~/claude/chipagents/git_girgis_fork/cv32e40p_girgis/verification_new
 **What it does**: Tests overflow, underflow, and edge conditions
 **Transactions**: 400
 **Focus**: Boundary values and error conditions
+
+#### **⚠️ IMPORTANT: Command Syntax**
+**✅ CORRECT:**
+```bash
+./scripts/run_vcs.sh alu_performance_test
+```
+
+**❌ WRONG:**
+```bash
+./scripts/run_vcs.sh +UVM_TESTNAME=alu_performance_test  # Don't use this!
+```
+The script automatically adds the `+UVM_TESTNAME=` prefix. Just provide the test name as the first argument.
 
 ### **Comprehensive Testing**
 
@@ -264,6 +276,19 @@ cd ~/claude/chipagents/git_girgis_fork/cv32e40p_girgis/verification_new
 **Transactions**: 10000
 **Focus**: Reliability under stress
 
+### **All Available Stage 2 Tests**
+
+| Test Name | Command | Duration | Transactions | Focus |
+|-----------|---------|----------|--------------|-------|
+| **Data Pattern** | `./scripts/run_vcs.sh alu_data_pattern_test` | 5 min | 500 | Boundary conditions |
+| **Corner Case** | `./scripts/run_vcs.sh alu_corner_case_test` | 5 min | 400 | Edge conditions |
+| **Exhaustive** | `./scripts/run_vcs.sh alu_exhaustive_test` | 10 min | 1000 | Full operation coverage |
+| **Performance** | `./scripts/run_vcs.sh alu_performance_test` | 15 min | 2000 | IPC analysis |
+| **Mixed Workload** | `./scripts/run_vcs.sh alu_mixed_workload_test` | 20 min | 2000 | Realistic patterns |
+| **Pipeline Hazard** | `./scripts/run_vcs.sh alu_pipeline_hazard_test` | 15 min | 600 | Hazard detection |
+| **Stress** | `./scripts/run_vcs.sh alu_stress_test` | 45 min | 10000 | Reliability |
+| **Comprehensive** | `./scripts/run_vcs.sh alu_comprehensive_stage2_test` | 30 min | 3000+ | All phases |
+
 ### **Advanced Testing Options**
 
 #### **Custom Verbosity**
@@ -271,20 +296,41 @@ cd ~/claude/chipagents/git_girgis_fork/cv32e40p_girgis/verification_new
 # High verbosity for debugging
 ./scripts/run_vcs.sh alu_corner_case_test UVM_HIGH
 
+# Medium verbosity (default)
+./scripts/run_vcs.sh alu_performance_test UVM_MEDIUM
+
 # Low verbosity for performance
 ./scripts/run_vcs.sh alu_stress_test UVM_LOW
 ```
 
 #### **Custom Seeds**
 ```bash
-# Reproducible results
+# Reproducible results with specific seed
 ./scripts/run_vcs.sh alu_performance_test UVM_MEDIUM 12345
+
+# Different seed for variation
+./scripts/run_vcs.sh alu_data_pattern_test UVM_LOW 54321
 ```
 
 #### **Debug Mode**
 ```bash
 # Enable debug features
 ./scripts/run_vcs.sh alu_corner_case_test UVM_HIGH 123 +define+DEBUG_MODE
+
+# Multiple debug options
+./scripts/run_vcs.sh alu_performance_test UVM_HIGH 456 +define+DEBUG_MODE +define+VERBOSE_LOGGING
+```
+
+#### **Script Usage Pattern**
+```bash
+# General syntax:
+./scripts/run_vcs.sh [TEST_NAME] [VERBOSITY] [SEED] [ADDITIONAL_OPTIONS]
+
+# Examples:
+./scripts/run_vcs.sh alu_performance_test                    # Default verbosity and seed
+./scripts/run_vcs.sh alu_performance_test UVM_LOW           # Custom verbosity
+./scripts/run_vcs.sh alu_performance_test UVM_MEDIUM 999    # Custom verbosity and seed
+./scripts/run_vcs.sh alu_performance_test UVM_HIGH 123 +define+DEBUG_MODE  # All custom
 ```
 
 ### **Python Assembly Generation**

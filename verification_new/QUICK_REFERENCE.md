@@ -26,11 +26,36 @@ cd /path/to/cv32e40p_girgis/verification_new
 ```
 
 ### **Simulation Commands (VCS Required)**
+
+#### **Stage 1 Tests (Basic)**
 ```bash
-./scripts/run_vcs.sh                    # Default test
+./scripts/run_vcs.sh                    # Default test (alu_base_test)
 ./scripts/run_vcs.sh alu_arith_test     # Arithmetic operations
 ./scripts/run_vcs.sh alu_logic_test     # Logic operations
 ./scripts/run_vcs.sh alu_shift_test     # Shift operations
+```
+
+#### **Stage 2 Tests (Advanced)**
+```bash
+./scripts/run_vcs.sh alu_data_pattern_test      # 8 data patterns (5 min)
+./scripts/run_vcs.sh alu_corner_case_test       # Edge conditions (5 min)
+./scripts/run_vcs.sh alu_performance_test       # IPC analysis (15 min)
+./scripts/run_vcs.sh alu_exhaustive_test        # Full coverage (10 min)
+./scripts/run_vcs.sh alu_comprehensive_stage2_test  # All phases (30 min)
+```
+
+#### **⚠️ IMPORTANT: Command Syntax**
+**✅ CORRECT:**
+```bash
+./scripts/run_vcs.sh alu_performance_test
+```
+**❌ WRONG:**
+```bash
+./scripts/run_vcs.sh +UVM_TESTNAME=alu_performance_test  # Don't use this!
+```
+
+#### **Other Commands**
+```bash
 ./scripts/compile_test.sh               # Compilation test only
 ```
 
