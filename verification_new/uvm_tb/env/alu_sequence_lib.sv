@@ -430,16 +430,17 @@ class alu_corner_case_sequence extends alu_base_sequence;
     task test_max_min_values();
         `uvm_info("ALU_SEQ", "Testing max/min values", UVM_MEDIUM)
         
-        logic [31:0] test_values[5] = '{
-            32'h00000000,  // Zero
-            32'h00000001,  // Min positive
-            32'h7FFFFFFF,  // Max positive
-            32'h80000000,  // Min negative
-            32'hFFFFFFFF   // Max negative (-1)
-        };
+        logic [31:0] test_values[5];
         
-        foreach (test_values[i]) begin
-            foreach (test_values[j]) begin
+        // Initialize test values
+        test_values[0] = 32'h00000000;  // Zero
+        test_values[1] = 32'h00000001;  // Min positive
+        test_values[2] = 32'h7FFFFFFF;  // Max positive
+        test_values[3] = 32'h80000000;  // Min negative
+        test_values[4] = 32'hFFFFFFFF;  // Max negative (-1)
+        
+        for (int i = 0; i < 5; i++) begin
+            for (int j = 0; j < 5; j++) begin
                 alu_sequence_item item;
                 
                 item = alu_sequence_item::type_id::create($sformatf("maxmin_%0d_%0d", i, j));
