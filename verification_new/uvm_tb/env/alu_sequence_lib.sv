@@ -146,7 +146,7 @@ class alu_data_pattern_sequence extends alu_base_sequence;
                 
                 if (j % 20 == 0) begin
                     `uvm_info("ALU_SEQ", $sformatf("Pattern %s: %0d/%0d - %s", 
-                             current_pattern.name(), j+1, pattern_transactions, item.convert2string()), UVM_HIGH)
+                             current_pattern.name(), j+1, (num_transactions / target_patterns.size()), item.convert2string()), UVM_HIGH)
                 end
             end
         end
