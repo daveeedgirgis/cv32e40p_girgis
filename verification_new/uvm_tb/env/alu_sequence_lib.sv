@@ -430,7 +430,7 @@ class alu_corner_case_sequence extends alu_base_sequence;
     task test_max_min_values();
         `uvm_info("ALU_SEQ", "Testing max/min values", UVM_MEDIUM)
         
-        logic [31:0] test_values[] = {
+        logic [31:0] test_values[5] = '{
             32'h00000000,  // Zero
             32'h00000001,  // Min positive
             32'h7FFFFFFF,  // Max positive
