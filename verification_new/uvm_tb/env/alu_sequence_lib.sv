@@ -22,6 +22,7 @@ class alu_base_sequence extends uvm_sequence #(alu_sequence_item);
         for (int i = 0; i < num_transactions; i++) begin
             alu_sequence_item item;
             
+            item = alu_sequence_item::type_id::create("item");
             start_item(item);
             if (!item.randomize()) begin
                 `uvm_error("ALU_SEQ", "Randomization failed")
@@ -52,6 +53,7 @@ class alu_arithmetic_sequence extends alu_base_sequence;
         for (int i = 0; i < num_transactions; i++) begin
             alu_sequence_item item;
             
+            item = alu_sequence_item::type_id::create("item");
             start_item(item);
             if (!item.randomize() with {
                 operation inside {ALU_ADD, ALU_SUB};
