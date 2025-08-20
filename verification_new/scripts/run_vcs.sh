@@ -100,6 +100,8 @@ validate_rtl_files() {
     # Check critical RTL files
     local rtl_files=(
         "include/cv32e40p_pkg.sv"
+        "include/cv32e40p_apu_core_pkg.sv"
+        "include/cv32e40p_fpu_pkg.sv"
         "cv32e40p_alu.sv"
         "cv32e40p_ex_stage.sv"
         "cv32e40p_core.sv"
@@ -163,8 +165,9 @@ main() {
     clean_build
     
     # Set up environment variables
-    export UVM_HOME="${UVM_HOME:-/opt/synopsys/vcs/etc/uvm}"
-    export VCS_HOME="${VCS_HOME:-/opt/synopsys/vcs}"
+    export UVM_HOME="${UVM_HOME:-/home/ubuntu/tools/synopsys/tools/vcs/W-2024.09-SP1/etc/uvm-1.2}"
+    export VCS_HOME="${VCS_HOME:-/home/ubuntu/tools/synopsys/tools/vcs/W-2024.09-SP1}"
+    export PATH="$VCS_HOME/bin:$PATH"
     
     if [ ! -d "$UVM_HOME" ]; then
         print_error "UVM_HOME not found: $UVM_HOME"
@@ -211,7 +214,10 @@ main() {
     print_info "Creating file list..."
     cat > files.f << EOF
 // RTL Files - Core CV32E40P files needed for ALU verification
+// Package files must be compiled first
 $RTL_DIR/include/cv32e40p_pkg.sv
+$RTL_DIR/include/cv32e40p_apu_core_pkg.sv
+$RTL_DIR/include/cv32e40p_fpu_pkg.sv
 $RTL_DIR/cv32e40p_alu.sv
 $RTL_DIR/cv32e40p_alu_div.sv
 $RTL_DIR/cv32e40p_ff_one.sv

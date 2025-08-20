@@ -23,6 +23,10 @@ print_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
 print_info "=== Stage 1 Compilation Test ==="
 
+# Set up VCS environment
+export VCS_HOME="${VCS_HOME:-/home/ubuntu/tools/synopsys/tools/vcs/W-2024.09-SP1}"
+export PATH="$VCS_HOME/bin:$PATH"
+
 # Check if VCS is available
 if ! command -v vcs &> /dev/null; then
     print_error "VCS not found. This test requires VCS for compilation."
@@ -35,14 +39,17 @@ print_info "Creating minimal test file list..."
 
 cat > test_files.f << EOF
 // Minimal file list for compilation test
+// Package files must be compiled first
 $RTL_DIR/include/cv32e40p_pkg.sv
+$RTL_DIR/include/cv32e40p_apu_core_pkg.sv
+$RTL_DIR/include/cv32e40p_fpu_pkg.sv
 $UVM_TB_DIR/interfaces/cv32e40p_if.sv
 $UVM_TB_DIR/interfaces/alu_monitor_if.sv
 $UVM_TB_DIR/env/alu_pkg.sv
 EOF
 
 # Set up minimal environment
-export UVM_HOME="${UVM_HOME:-/opt/synopsys/vcs/etc/uvm}"
+export UVM_HOME="${UVM_HOME:-/home/ubuntu/tools/synopsys/tools/vcs/W-2024.09-SP1/etc/uvm-1.2}"
 
 if [ ! -d "$UVM_HOME" ]; then
     print_error "UVM_HOME not found: $UVM_HOME"

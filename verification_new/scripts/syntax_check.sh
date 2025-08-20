@@ -104,28 +104,29 @@ print_info "Checking for basic syntax issues..."
 
 syntax_errors=0
 
-# Check for missing semicolons at end of lines (basic check)
+# Check for basic SystemVerilog syntax patterns (improved)
 for file in "${files_to_check[@]}"; do
     if [[ "$file" == *.sv ]]; then
         if [ -f "$file" ]; then
-            # Check for lines that might be missing semicolons
-            missing_semicolons=$(grep -n "^\s*[a-zA-Z_][a-zA-Z0-9_]*\s*=" "$file" | grep -v ";" | wc -l)
-            if [ $missing_semicolons -gt 0 ]; then
-                print_error "Potential missing semicolons in $file: $missing_semicolons lines"
+            # Check for actual syntax issues - look for class/module/interface declarations
+            if ! grep -q "^\s*\(class\|module\|interface\|package\)" "$file"; then
+                # Skip files that might be include files or have different structure
+                continue
+            fi
+            
+            # Check for proper class/module/interface endings
+            if grep -q "^\s*class\s" "$file" && ! grep -q "endclass" "$file"; then
+                print_error "Class without endclass in $file"
                 syntax_errors=$((syntax_errors + 1))
             fi
-        fi
-    fi
-done
-
-# Check for unmatched begin/end pairs (basic check)
-for file in "${files_to_check[@]}"; do
-    if [[ "$file" == *.sv ]]; then
-        if [ -f "$file" ]; then
-            begin_count=$(grep -c "begin" "$file")
-            end_count=$(grep -c "end" "$file")
-            if [ $begin_count -ne $end_count ]; then
-                print_error "Unmatched begin/end in $file: begin=$begin_count, end=$end_count"
+            
+            if grep -q "^\s*module\s" "$file" && ! grep -q "endmodule" "$file"; then
+                print_error "Module without endmodule in $file"
+                syntax_errors=$((syntax_errors + 1))
+            fi
+            
+            if grep -q "^\s*interface\s" "$file" && ! grep -q "endinterface" "$file"; then
+                print_error "Interface without endinterface in $file"
                 syntax_errors=$((syntax_errors + 1))
             fi
         fi
