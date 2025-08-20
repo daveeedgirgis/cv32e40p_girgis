@@ -148,21 +148,34 @@ run_single_test() {
         coverage_opts="-cm_dir $VERIFICATION_DIR/coverage/regression_$TIMESTAMP/${test_name}.vdb"
     fi
     
-    # Execute test
+    # Execute test with better error handling
+    print_info "Command: ./scripts/run_vcs.sh \"$test_name\" \"$verbosity\" \"$RANDOM\" $coverage_opts"
+    
     if timeout 3600 ./scripts/run_vcs.sh "$test_name" "$verbosity" "$RANDOM" $coverage_opts > "$test_log" 2>&1; then
         local end_time=$(date +%s)
         local duration=$((end_time - start_time))
         local duration_min=$((duration / 60))
         
-        # Extract results from log
-        local actual_transactions=$(grep -o "transactions: [0-9]*" "$test_log" | tail -1 | grep -o "[0-9]*" || echo "N/A")
-        local errors=$(grep -c "UVM_ERROR" "$test_log" || echo "0")
-        local warnings=$(grep -c "UVM_WARNING" "$test_log" || echo "0")
+        # Extract results from log (check if log file exists first)
+        if [ -f "$test_log" ]; then
+            local actual_transactions=$(grep -o "transactions: [0-9]*" "$test_log" | tail -1 | grep -o "[0-9]*" || echo "N/A")
+            local errors=$(grep -c "UVM_ERROR" "$test_log" || echo "0")
+            local warnings=$(grep -c "UVM_WARNING" "$test_log" || echo "0")
+        else
+            print_warning "Log file not created: $test_log"
+            local actual_transactions="N/A"
+            local errors="UNKNOWN"
+            local warnings="UNKNOWN"
+        fi
         
-        if [ "$errors" -eq 0 ]; then
+        if [ "$errors" = "0" ]; then
             test_results[$test_name]="PASSED"
             print_success "$test_name PASSED (${duration_min}m, ${actual_transactions} trans, ${warnings} warnings)"
             ((passed_tests++))
+        elif [ "$errors" = "UNKNOWN" ]; then
+            test_results[$test_name]="FAILED"
+            print_error "$test_name FAILED (script error - no log created)"
+            ((failed_tests++))
         else
             test_results[$test_name]="FAILED"
             print_error "$test_name FAILED ($errors errors, $warnings warnings)"
